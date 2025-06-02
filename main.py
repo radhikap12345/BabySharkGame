@@ -7,7 +7,7 @@ import asyncio
 WIDTH, HEIGHT = 800, 600
 BLUE = (158, 235, 247)
 WHITE = (255, 255, 255)
-MUSIC_FILE = "baby-shark-tune.mp3"
+MUSIC_FILE = "baby-shark-tune.ogg"
 MUSIC_START_TIME = 1  # seconds
 
 
