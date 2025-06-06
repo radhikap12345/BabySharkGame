@@ -47,6 +47,9 @@ class BabySharkGame:
         self.clock = pygame.time.Clock()
         # Ensure replay rect is always defined
         self.replay_rect = pygame.Rect(0, 0, 0, 0)
+        # Touch button rects
+        self.up_btn_rect = pygame.Rect(WIDTH - 110, HEIGHT - 160, 90, 60)
+        self.down_btn_rect = pygame.Rect(WIDTH - 110, HEIGHT - 90, 90, 60)
         # Initialize game state
         self.reset_game()
 
@@ -114,6 +117,13 @@ class BabySharkGame:
         )
         instructions_rect = instructions_text.get_rect(center=(WIDTH // 2, HEIGHT - 30))
         self.screen.blit(instructions_text, instructions_rect)
+        # Draw touch buttons (always visible)
+        pygame.draw.rect(self.screen, (0, 120, 255), self.up_btn_rect, border_radius=15)
+        pygame.draw.rect(self.screen, (0, 120, 255), self.down_btn_rect, border_radius=15)
+        up_text = self.button_font.render("▲", True, WHITE)
+        down_text = self.button_font.render("▼", True, WHITE)
+        self.screen.blit(up_text, up_text.get_rect(center=self.up_btn_rect.center))
+        self.screen.blit(down_text, down_text.get_rect(center=self.down_btn_rect.center))
         # Draw game over message and buttons if game is over
         if self.game_over:
             over_text = self.font.render("Game Over!", True, WHITE)
@@ -130,6 +140,8 @@ class BabySharkGame:
         fish_speed = 6
         obstacle_speed = 7
         running = True
+        move_up = False
+        move_down = False
         while running:
             self.clock.tick(60)
             await asyncio.sleep(0)
@@ -169,17 +181,26 @@ class BabySharkGame:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-                # Handle button clicks after game over
-                if self.game_over and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                # Touch/mouse button down
+                if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = pygame.mouse.get_pos()
-                    if self.replay_rect.collidepoint(mouse_pos):
-                        self.reset_game()
+                    if self.up_btn_rect.collidepoint(mouse_pos):
+                        move_up = True
+                    if self.down_btn_rect.collidepoint(mouse_pos):
+                        move_down = True
+                    if self.game_over and event.button == 1:
+                        if self.replay_rect.collidepoint(mouse_pos):
+                            self.reset_game()
+                # Touch/mouse button up
+                if event.type == pygame.MOUSEBUTTONUP:
+                    move_up = False
+                    move_down = False
             # Handle keyboard input for shark movement
             keys = pygame.key.get_pressed()
             if not self.game_over:
-                if keys[pygame.K_UP] and self.shark_rect.top > 0:
+                if (keys[pygame.K_UP] or move_up) and self.shark_rect.top > 0:
                     self.shark_rect.y -= 5
-                if keys[pygame.K_DOWN] and self.shark_rect.bottom < HEIGHT:
+                if (keys[pygame.K_DOWN] or move_down) and self.shark_rect.bottom < HEIGHT:
                     self.shark_rect.y += 5
             # Draw everything
             self.draw_window()
