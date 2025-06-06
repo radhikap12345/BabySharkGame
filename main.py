@@ -120,8 +120,8 @@ class BabySharkGame:
         # Draw touch buttons (always visible)
         pygame.draw.rect(self.screen, (0, 120, 255), self.up_btn_rect, border_radius=15)
         pygame.draw.rect(self.screen, (0, 120, 255), self.down_btn_rect, border_radius=15)
-        up_text = self.button_font.render("▲", True, WHITE)
-        down_text = self.button_font.render("▼", True, WHITE)
+        up_text = self.button_font.render("Up", True, WHITE)
+        down_text = self.button_font.render("Down", True, WHITE)
         self.screen.blit(up_text, up_text.get_rect(center=self.up_btn_rect.center))
         self.screen.blit(down_text, down_text.get_rect(center=self.down_btn_rect.center))
         # Draw game over message and buttons if game is over
