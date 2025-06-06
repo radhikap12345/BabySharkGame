@@ -47,8 +47,8 @@ class BabySharkGame:
         self.clock = pygame.time.Clock()
         # Ensure replay rect is always defined
         self.replay_rect = pygame.Rect(0, 0, 0, 0)
-        # Touch button rects
-        self.up_btn_rect = pygame.Rect(WIDTH - 110, HEIGHT - 160, 90, 60)
+        # Touch button rects (increase vertical gap)
+        self.up_btn_rect = pygame.Rect(WIDTH - 110, HEIGHT - 210, 90, 60)
         self.down_btn_rect = pygame.Rect(WIDTH - 110, HEIGHT - 90, 90, 60)
         # Initialize game state
         self.reset_game()
